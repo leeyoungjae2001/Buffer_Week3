@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="Author" content="">
+    <meta name="Keywords" content="">
+    <meta name="Description" content="">
+    <title>Document</title>
+    <script src="./modal.js"></script>
+    <style>
+        body {
+            font-family: Tahoma;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        #calendar {
+            width: 100%;
+        }
+
+        #calendar a {
+            color: #8e352e;
+            text-decoration: none;
+        }
+
+        #calendar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        #calendar li {
+            display: block;
+            float: left;
+            width: 14.342%;
+            padding: 5px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            margin-right: -1px;
+            margin-bottom: -1px;
+        }
+
+        #calendar ul.weekdays {
+            height: 40px;
+            background: #8e352e;
+        }
+
+        #calendar ul.weekdays li {
+            text-align: center;
+            text-transform: uppercase;
+            line-height: 20px;
+            border: none !important;
+            padding: 10px 6px;
+            color: #fff;
+            font-size: 13px;
+        }
+
+        #calendar .days li {
+            height: 180px;
+        }
+
+        #calendar .days li:hover {
+            background: #d3d3d3;
+        }
+
+        #calendar .date {
+            text-align: center;
+            margin-bottom: 5px;
+            padding: 4px;
+            background: #333;
+            color: #fff;
+            width: 20px;
+            border-radius: 50%;
+            float: right;
+        }
+
+        #calendar .event {
+            clear: both;
+            display: block;
+            font-size: 13px;
+            border-radius: 4px;
+            padding: 5px;
+            margin-top: 40px;
+            margin-bottom: 5px;
+            line-height: 14px;
+            background: #e4f2f2;
+            border: 1px solid #b5dbdc;
+            color: #009aaf;
+            text-decoration: none;
+        }
+
+        #calendar .event-desc {
+            color: #666;
+            margin: 3px 0 7px 0;
+            text-decoration: none;
+        }
+
+        #calendar .other-month {
+            background: #f5f5f5;
+            color: #666;
+        }
+
+        /* ============================
+                Mobile Responsiveness
+   ============================*/
+        @media (max-width: 768px) {
+
+            #calendar .weekdays,
+            #calendar .other-month {
+                display: none;
+            }
+
+            #calendar li {
+                height: auto !important;
+                border: 1px solid #ededed;
+                width: 100%;
+                padding: 10px;
+                margin-bottom: -1px;
+            }
+
+            #calendar .date {
+                float: none;
+            }
+        }
+
+        .modal {
+            display: none;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%;
+            /* Could be more or less, depending on screen size */
+        }
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        table tr td {
+            padding: 20px;
+        }
+
+        input, textarea { 
+			padding: 9px;
+			border: solid 1px #E5E5E5;
+			outline: 0;
+			font: normal 13px/100% Verdana, Tahoma, sans-serif;
+			width: 200px;
+			background: #FFFFFF url('http://store.blueb.co.kr/data/201010/IJ12864517897808/bg_form.png') left top repeat-x;
+			background: -webkit-gradient(linear, left top, left 25, from(#FFFFFF), color-stop(4%, #EEEEEE), to(#FFFFFF));
+			background: -moz-linear-gradient(top, #FFFFFF, #EEEEEE 1px, #FFFFFF 25px);
+			box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+			-moz-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+			-webkit-box-shadow: rgba(0,0,0, 0.1) 0px 0px 8px;
+			}
+
+		textarea { 
+			width: 400px;
+			max-width: 400px;
+			height: 150px;
+			line-height: 150%;
+			}
+
+		input:hover, textarea:hover,
+		input:focus, textarea:focus { 
+			border-color: #C9C9C9; 
+			-webkit-box-shadow: rgba(0, 0, 0, 0.15) 0px 0px 8px;
+			}
+
+		.form label { 
+			margin-left: 10px; 
+			color: #999999; 
+			}
+
+		.submit input {
+			width: auto;
+			padding: 9px 15px;
+			background: #617798;
+			border: 0;
+			font-size: 14px;
+			color: #FFFFFF;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			}
+
+    </style>
+</head>
+
+<body>
+    <div id="calendar-wrap">
+        <header>
+            <h1>2020년 11월</h1>
+        </header>
+        <div id="calendar">
+            <ul class="weekdays">
+                <li>Sunday</li>
+                <li>Monday</li>
+                <li>Tuesday</li>
+                <li>Wednesday</li>
+                <li>Thursday</li>
+                <li>Friday</li>
+                <li>Saturday</li>
+            </ul>
+            <!-- Days from previous month -->
+            <ul class="days">
+                <li class="day other-month">
+                    <div class="date">27</div>
+                </li>
+                <li class="day other-month">
+                    <div class="date">28</div>
+                    <div class="event">
+                        <div class="event-desc">
+                            HTML 5 lecture with Brad Traversy from Eduonix
+                        </div>
+                        <div class="event-time">
+                            13:00 to 15:00
+                        </div>
+                    </div>
+                </li>
+                <li class="day other-month">
+                    <div class="date">29</div>
+                </li>
+                <li class="day other-month">
+                    <div class="date">30</div>
+                </li>
+                <li class="day other-month">
+                    <div class="date">31</div>
+                </li>
+                <!-- Days in current month -->
+                <li class="day" id="d1">
+                    <div class="date">1</div>
+                </li>
+                <li class="day" id="d2">
+                    <div class="date">2</div>
+                    <div class="event">
+                        <div class="event-desc">
+                            Career development @ Community College room #402
+                        </div>
+                        <div class="event-time">
+                            14:00 to 17:00
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <!-- Row #2 -->
+            <ul class="days">
+                <li class="day" id="d3">
+                    <div class="date">3</div>
+                </li>
+                <li class="day" id="d4">
+                    <div class="date">4</div>
+                </li>
+                <li class="day" id="d5">
+                    <div class="date">5</div>
+                </li>
+                <li class="day" id="d6">
+                    <div class="date">6</div>
+                </li>
+                <li class="day" id="d7">
+                    <div class="date">7</div>
+                    <div class="event">
+                        <div class="event-desc">
+                            Group Project meetup
+                        </div>
+                        <div class="event-time">
+                            18:00 to 20:30
+                        </div>
+                    </div>
+                </li>
+                <li class="day" id="d8">
+                    <div class="date">8</div>
+                </li>
+                <li class="day" id="d9">
+                    <div class="date">9</div>
+                </li>
+            </ul>
+            <!-- Row #3 -->
+            <ul class="days">
+                <li class="day" id="d10">
+                    <div class="date">10</div>
+                </li>
+                <li class="day" id="d11">
+                    <div class="date">11</div>
+                </li>
+                <li class="day" id="d12">
+                    <div class="date">12</div>
+                </li>
+                <li class="day" id="d13">
+                    <div class="date">13</div>
+                </li>
+                <li class="day" id="d14">
+                    <div class="date">14</div>
+                    <div class="event">
+                        <div class="event-desc">
+                            Board Meeting
+                        </div>
+                        <div class="event-time">
+                            13:00 to 15:00
+                        </div>
+                    </div>
+                </li>
+                <li class="day" id="d15">
+                    <div class="date">15</div>
+                </li>
+                <li class="day" id="d16">
+                    <div class="date">16</div>
+                </li>
+            </ul>
+            <!-- Row #4 -->
+            <ul class="days">
+                <li class="day" id="d17">
+                    <div class="date">17</div>
+                </li>
+                <li class="day" id="d18">
+                    <div class="date">18</div>
+                </li>
+                <li class="day" id="d19">
+                    <div class="date">19</div>
+                </li>
+                <li class="day" id="d20">
+                    <div class="date">20</div>
+                </li>
+                <li class="day" id="d21">
+                    <div class="date">21</div>
+                </li>
+                <li class="day" id="d22">
+                    <div class="date">22</div>
+                    <div class="event">
+                        <div class="event-desc">
+                            Conference call
+                        </div>
+                        <div class="event-time">
+                            9:00 to 12:00
+                        </div>
+                    </div>
+                </li>
+                <li class="day" id="d23">
+                    <div class="date">23</div>
+                </li>
+            </ul>
+            <!-- Row #5 -->
+            <ul class="days">
+                <li class="day" id="d24">
+                    <div class="date">24</div>
+                </li>
+                <li class="day" id="d25">
+                    <div class="date">25</div>
+                    <div class="event">
+                        <div class="event-desc">
+                            Conference Call
+                        </div>
+                        <div class="event-time">
+                            13:00 to 15:00
+                        </div>
+                    </div>
+                </li>
+                <li class="day" id="d26">
+                    <div class="date">26</div>
+                </li>
+                <li class="day" id="d27">
+                    <div class="date">27</div>
+                </li>
+                <li class="day" id="d28">
+                    <div class="date">28</div>
+                </li>
+                <li class="day" id="d29">
+                    <div class="date">29</div>
+                </li>
+                <li class="day" id="d30">
+                    <div class="date">30</div>
+                </li>
+            </ul>
+            <!-- Row #6 -->
+            <ul class="days">
+                <li class="day" id="d31">
+                    <div class="date">31</div>
+                </li>
+                <li class="day other-month">
+                    <div class="date">1</div> <!-- Next Month -->
+                </li>
+                <li class="day other-month">
+                    <div class="date">2</div>
+                </li>
+                <li class="day other-month">
+                    <div class="date">3</div>
+                </li>
+                <li class="day other-month">
+                    <div class="date">4</div>
+                </li>
+                <li class="day other-month">
+                    <div class="date">5</div>
+                </li>
+                <li class="day other-month">
+                    <div class="date">6</div>
+                </li>
+            </ul>
+        </div><!-- /. calendar -->
+    </div><!-- /. wrap -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <span class="close" id="btn_close">&times;</span>
+            <h2>일정 추가</h2>
+            <table class="modal-table">
+                <tr>
+                    <td>내용 : </td>
+                    <td><input type="text" id="input_content"></td>
+                </tr>
+                <tr>
+                    <td>날짜 : </td>
+                    <td><input type="date" id="input_date" value=""></td>
+                </tr>
+                <tr>
+                    <td>시작 : </td>
+                    <td><input type="time" id="start_time" name="appt"></td>
+                </tr>
+                <tr>
+                    <td>종료 : </td>
+                    <td><input type="time" id="end_time" name="appt"></td>
+                </tr>
+            </table>
+            <br>
+            <button value="입력" id="btn_add">입력</button>
+            <button value="삭제" id="btn_del" style="color: red; display: none;">삭제</button>
+        </div>
+    </div>
+</body>
+
+</html>
